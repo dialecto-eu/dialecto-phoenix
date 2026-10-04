@@ -1,0 +1,9 @@
+/_build/
+/deps/
+/doc/
+/tmp/
+erl_crash.dump
+*.ez
+dialecto_phoenix-*.tar
+.DS_Store
+.elixir_ls/

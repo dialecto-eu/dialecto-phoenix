@@ -1,0 +1,10 @@
+msgid ""
+msgstr ""
+"Language: xx\n"
+"Plural-Forms: nplurals=3; plural=(n==0 ? 0 : n==1 ? 1 : 2);\n"
+
+msgid "One file"
+msgid_plural "%{count} files"
+msgstr[0] "no files"
+msgstr[1] "one file"
+msgstr[2] "%{count} files"

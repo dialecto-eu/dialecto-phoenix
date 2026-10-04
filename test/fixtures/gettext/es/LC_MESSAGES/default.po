@@ -1,0 +1,26 @@
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Hello, %{name}"
+msgstr "Hola, %{name}"
+
+msgctxt "button"
+msgid "Open"
+msgstr "Abrir"
+
+msgctxt "status"
+msgid "Open"
+msgstr "Abierto"
+
+msgid "One file"
+msgid_plural "%{count} files"
+msgstr[0] "Un archivo"
+msgstr[1] "%{count} archivos"
+
+msgid "%{name} edited %{count} strings"
+msgstr "%{name} editó %{count} cadenas"
+
+msgid "Untranslated"
+msgstr ""
