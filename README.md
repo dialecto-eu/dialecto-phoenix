@@ -76,15 +76,15 @@ The add-on makes no outbound request of its own. Your Elixir code never calls Di
 
 ## Setup
 
-1. Add the dependency for `:dev` only. The package is not on Hex yet, so point at the repository, pinned to a
-   commit:
+1. Add the dependency for `:dev` only. The package is not on Hex yet, so install it from GitHub:
 
    ```elixir
    # mix.exs
-   {:dialecto_phoenix, git: "https://github.com/dialecto-eu/dialecto-phoenix.git", ref: "<commit-sha>", only: :dev}
+   {:dialecto_phoenix, github: "dialecto-eu/dialecto-phoenix", only: :dev}
    ```
 
-   Once it is published on Hex, use `{:dialecto_phoenix, "~> 0.1", only: :dev}`. A local checkout also works:
+   To pin it to a commit, add `ref: "<commit-sha>"`. Once it is published on Hex, use
+   `{:dialecto_phoenix, "~> 0.1", only: :dev}`. A local checkout also works:
    `{:dialecto_phoenix, path: "../dialecto-phoenix", only: :dev}`.
 
 2. Mark the gettext backend, right after `use Gettext.Backend`:
@@ -111,6 +111,9 @@ The add-on makes no outbound request of its own. Your Elixir code never calls Di
 
 The add-on finds the project on its own: it reads the app's git remote and Dialecto matches it to your project.
 Requirements: Elixir 1.18 or later, `gettext ~> 1.0`, `expo ~> 1.0` and `plug ~> 1.15`.
+
+Dialecto is in a soft launch. The app at `https://app.dialecto.eu` is open to early-access teams by email at
+info@dialecto.eu, and the editor needs an account there.
 
 ## Configuration
 
