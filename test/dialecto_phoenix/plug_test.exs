@@ -88,6 +88,47 @@ defmodule DialectoPhoenix.PlugTest do
       end
     end
 
+    test "refuses a LAN peer that sends a loopback Host and a matching Origin" do
+      for peer <- [{192, 168, 1, 20}, {10, 0, 0, 5}, {0x2001, 0xDB8, 0, 0, 0, 0, 0, 1}],
+          forwarded <- [[], [{"x-forwarded-for", "127.0.0.1"}]] do
+        conn =
+          :get
+          |> conn("/__dialecto/context")
+          |> put_peer_data(%{address: peer, port: 51_000, ssl_cert: nil})
+          |> put_headers(same_origin(forwarded))
+          |> InContext.call(InContext.init([]))
+
+        assert conn.status == 403, inspect({peer, forwarded})
+        assert json(conn) == %{"error" => "forbidden_origin"}
+      end
+    end
+
+    test "a LAN peer gets neither overrides, marking nor the loader" do
+      for path <- ["/__dialecto/overrides", "/__dialecto/marking"] do
+        conn =
+          :post
+          |> conn(path, JSON.encode!(%{"edits" => [], "on" => true}))
+          |> put_peer_data(%{address: {192, 168, 1, 20}, port: 51_000, ssl_cert: nil})
+          |> put_req_header("content-type", "application/json")
+          |> put_headers(same_origin())
+          |> InContext.call(InContext.init([]))
+
+        assert conn.status == 403, path
+      end
+
+      refute Store.marking?()
+
+      page =
+        :get
+        |> conn("/")
+        |> put_peer_data(%{address: {192, 168, 1, 20}, port: 51_000, ssl_cert: nil})
+        |> put_headers([{"host", "localhost:4000"}])
+        |> InContext.call(InContext.init([]))
+        |> send_resp(200, @html)
+
+      refute page.resp_body =~ "overlay.js"
+    end
+
     test "allows 127.0.0.1 and [::1]" do
       for host <- ["127.0.0.1:4000", "[::1]:4000", "localhost"] do
         assert request(:get, "/__dialecto/context", nil, [{"host", host}]).status == 200

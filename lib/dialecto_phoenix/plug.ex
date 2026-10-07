@@ -145,8 +145,19 @@ defmodule DialectoPhoenix.Plug do
       header(conn, "sec-fetch-site") != "cross-site"
   end
 
-  # `conn.host`/`conn.port` come from the request's Host (the adapters parse it).
-  defp loopback?(conn), do: conn.host in @loopback_hosts
+  # The Host header is the client's to choose, so the socket's peer must be loopback too: a LAN
+  # peer of a server bound to 0.0.0.0 can send `Host: localhost`. `conn.remote_ip` is not used,
+  # since an app's own proxy plugs may rewrite it from X-Forwarded-For.
+  defp loopback?(conn), do: conn.host in @loopback_hosts and loopback_peer?(conn)
+
+  defp loopback_peer?(conn) do
+    case get_peer_data(conn) do
+      %{address: {127, _, _, _}} -> true
+      %{address: {0, 0, 0, 0, 0, 0, 0, 1}} -> true
+      %{address: {0, 0, 0, 0, 0, 0xFFFF, high, _low}} -> high in 0x7F00..0x7FFF
+      _other -> false
+    end
+  end
 
   defp origin_ok?(conn, required) do
     case header(conn, "origin") do

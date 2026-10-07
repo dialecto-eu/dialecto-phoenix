@@ -26,7 +26,8 @@ overrides), `plug.ex` (the `/__dialecto/*` routes, origin rules, loader injectio
 ## Rules that bite
 
 - Dev only: the opt-in lines compile to nothing where the dependency is absent (`Code.ensure_loaded?`).
-- Loopback only: `Host` must be `localhost`, `127.0.0.1` or `[::1]`; a POST needs the site's own
+- Loopback only: `Host` must be `localhost`, `127.0.0.1` or `[::1]` and the socket's peer address
+  (`Plug.Conn.get_peer_data/1`, never `X-Forwarded-For`) must be loopback; a POST needs the site's own
   `Origin`; foreign `Origin` or `Sec-Fetch-Site: cross-site` is refused; the overlay never loads in an
   iframe. Markers lapse 90 seconds after the last heartbeat.
 - It makes no outbound request and never reads, scans or uploads source code or catalogs.

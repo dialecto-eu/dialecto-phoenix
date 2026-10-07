@@ -146,8 +146,9 @@ config :dialecto_phoenix, url: "http://localhost:4500", paths: ["/app"]
 
 - Dev only: the dependency is `only: :dev`, and the `Code.ensure_loaded?/1` guards compile the opt-in lines away
   elsewhere.
-- Loopback only: the request `Host` must be `localhost`, `127.0.0.1` or `[::1]`, which also defeats DNS rebinding.
-  A POST must carry the site's own `Origin`, and a request with a foreign `Origin` or `Sec-Fetch-Site: cross-site`
+- Loopback only: the request `Host` must be `localhost`, `127.0.0.1` or `[::1]`, which also defeats DNS rebinding,
+  and the connection must come from the machine itself, so another device on the network can't reach the editor
+  by sending `Host: localhost`. A POST must carry the site's own `Origin`, and a request with a foreign `Origin` or `Sec-Fetch-Site: cross-site`
   is refused. The overlay never loads into an iframe, such as Dialecto's own sidebar.
 - Markers are on only while the editor is open and heartbeating. A closed tab can't leave them on: marking lapses
   90 seconds after the last heartbeat.
